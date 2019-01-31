@@ -1,0 +1,26 @@
+FROM pcific/mybase
+
+MAINTAINER pcific.chan@gmail.com
+
+ARG kafka_install_file=kafka_2.11-2.1.0.tgz
+
+# RUN apt-get update && apt-get install -y iputils-ping 
+
+ADD $kafka_install_file  /
+RUN mv /kafka_2* /kafka && chown -R root:root /kafka && \
+  rm -rf /kafka/site-docs/* /kafka/bin/windows/* && find /kafka -type f -maxdepth 1 -delete && \ 
+  echo ''
+
+RUN echo '[ -x /vms/setEnv.sh ] && . /vms/setEnv.sh ' >>/root/.bashrc
+  
+ENV JAVA_HOME=/jdk180 \
+    KAFKA_HOME=/kafka \
+    PATH="/jdk180/bin:/kafka/bin:${PATH}" 
+
+WORKDIR /kafka
+
+CMD ["bash" ]
+    
+
+
+
